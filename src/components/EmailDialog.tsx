@@ -42,10 +42,11 @@ export default function EmailDialog({
     text: string;
   } | null>(null);
 
-  const handleClose = () => {
+  const handleClose = async () => {
+    onClose();
+    await new Promise((r) => setTimeout(r, 200)); // Stops the ui from glithcing out when closing the form
     setEmail("");
     setMessage(null);
-    onClose();
     setAfterSumbit(false);
   };
 
@@ -152,7 +153,11 @@ export default function EmailDialog({
             }}
           />
           {message && (
-            <Alert severity={message.type} onClose={() => setMessage(null)}>
+            <Alert
+              severity={message.type}
+              sx={{ mt: 2 }}
+              onClose={() => setMessage(null)}
+            >
               {message.text}
             </Alert>
           )}
