@@ -106,18 +106,7 @@ export default function EmailDialog({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="xs"
-      fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: 3,
-          p: 1,
-        },
-      }}
-    >
+    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
       <Box
         component="form"
         onSubmit={verifyToken != "" ? handleSubmit : handleShowCaptchaWarning}
@@ -128,7 +117,7 @@ export default function EmailDialog({
           alignItems: "center",
         }}
       >
-        <DialogTitle sx={{ pb: 1, width: "100%" }}>
+        <DialogTitle sx={{ width: "100%" }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
             {planTitle}
           </Typography>
@@ -136,18 +125,31 @@ export default function EmailDialog({
             Enter your email to get started
           </Typography>
         </DialogTitle>
-        <DialogContent sx={{ pt: 2, width: "100%" }}>
+        <DialogContent sx={{ width: "100%" }}>
           <TextField
+            id="email-dialog-input"
             autoFocus
             type="email"
-            fullWidth
-            variant="outlined"
-            placeholder="your.email@company.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
+            hiddenLabel
             size="medium"
-            sx={{ mb: 2 }}
+            variant="outlined"
+            placeholder="your.email@company.com"
+            fullWidth
+            disabled={loading}
+            slotProps={{
+              htmlInput: {
+                autoComplete: "email",
+                "aria-label": "Enter your email address",
+              },
+            }}
+            sx={{
+              marginTop: "5px",
+              "& .MuiOutlinedInput-root": {
+                bgcolor: "background.paper",
+              },
+            }}
           />
           {message && (
             <Alert severity={message.type} onClose={() => setMessage(null)}>
