@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 interface EmailDialogProps {
   open: boolean;
@@ -22,9 +23,22 @@ export default function EmailDialog({
   planTitle,
 }: EmailDialogProps) {
   const [email, setEmail] = React.useState("");
+  const [verifyToken, setVerifyToken] = React.useState("");
+  const [manualClose, setManualClose] = React.useState(false);
+  const [showCaptchaWarning, setShowCaptchaWarning] = React.useState(false);
+  const [afterSubmit, setAfterSumbit] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const captchaRef = React.useRef(null);
+  const onVerify = (token: string) => {
+    setVerifyToken(token);
+  };
+  const handleShowCaptchaWarning = (e: React.FormEvent) => {
+    e.preventDefault();
+    setManualClose(false);
+    setShowCaptchaWarning(true);
+  };
   const [message, setMessage] = React.useState<{
-    type: "success" | "error";
+    type: "success" | "error" | "warning";
     text: string;
   } | null>(null);
 
@@ -32,13 +46,17 @@ export default function EmailDialog({
     setEmail("");
     setMessage(null);
     onClose();
+    setAfterSumbit(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !email.includes("@")) {
-      setMessage({ type: "error", text: "Please enter a valid email address" });
+      setMessage({
+        type: "warning",
+        text: "Please enter a valid email address",
+      });
       return;
     }
 
@@ -52,6 +70,7 @@ export default function EmailDialog({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-capcha-token": verifyToken,
           },
           body: JSON.stringify({
             email,
@@ -66,6 +85,8 @@ export default function EmailDialog({
           text: "Thanks! I'll reach out within 24 hours to discuss your needs.",
         });
         setEmail("");
+        setVerifyToken("");
+        setAfterSumbit(true);
       } else {
         setMessage({
           type: "error",
@@ -78,6 +99,8 @@ export default function EmailDialog({
         text: "Unable to send request. Please try again later.",
       });
     } finally {
+      setManualClose(false);
+      setShowCaptchaWarning(false);
       setLoading(false);
     }
   };
@@ -95,8 +118,17 @@ export default function EmailDialog({
         },
       }}
     >
-      <Box component="form" onSubmit={handleSubmit}>
-        <DialogTitle sx={{ pb: 1 }}>
+      <Box
+        component="form"
+        onSubmit={verifyToken != "" ? handleSubmit : handleShowCaptchaWarning}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "centre",
+          alignItems: "center",
+        }}
+      >
+        <DialogTitle sx={{ pb: 1, width: "100%" }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
             {planTitle}
           </Typography>
@@ -104,7 +136,7 @@ export default function EmailDialog({
             Enter your email to get started
           </Typography>
         </DialogTitle>
-        <DialogContent sx={{ pt: 2 }}>
+        <DialogContent sx={{ pt: 2, width: "100%" }}>
           <TextField
             autoFocus
             type="email"
@@ -122,29 +154,62 @@ export default function EmailDialog({
               {message.text}
             </Alert>
           )}
+
+          {!verifyToken && showCaptchaWarning && !manualClose && (
+            <Alert
+              severity="warning"
+              sx={{ mt: 2 }}
+              onClose={() => setManualClose(true)}
+            >
+              Complete the Capture to Submit!
+            </Alert>
+          )}
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
-          <Button
-            onClick={handleClose}
-            disabled={loading}
-            variant="outlined"
-            fullWidth
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={loading}
-            fullWidth
-          >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </DialogActions>
+        {!afterSubmit ? (
+          <>
+            <HCaptcha
+              sitekey="cfc2a48a-879c-4edc-a7c4-93580dd239a6"
+              onVerify={onVerify}
+              ref={captchaRef}
+            />
+            <DialogActions sx={{ px: 3, pb: 2, gap: 1, width: "100%" }}>
+              <Button
+                onClick={handleClose}
+                disabled={loading}
+                variant="outlined"
+                fullWidth
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={loading}
+                fullWidth
+              >
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </DialogActions>
+          </>
+        ) : (
+          <DialogActions sx={{ px: 3, pb: 2, gap: 1, width: "100%" }}>
+            <Button
+              onClick={handleClose}
+              disabled={loading}
+              variant="contained"
+              fullWidth
+              sx={{
+                color: "btn.primary",
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        )}
       </Box>
     </Dialog>
   );

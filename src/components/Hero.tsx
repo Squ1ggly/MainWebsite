@@ -12,20 +12,35 @@ import visuallyHidden from "@mui/utils/visuallyHidden";
 import CloudIcon from "@mui/icons-material/Cloud";
 import SecurityIcon from "@mui/icons-material/Security";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Hero() {
   const [email, setEmail] = React.useState("");
+  const [verifyToken, setVerifyToken] = React.useState("");
+  const [manualClose, setManualClose] = React.useState(false);
+  const [showCaptchaWarning, setShowCaptchaWarning] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState<{
-    type: "success" | "error";
+    type: "success" | "error" | "warning";
     text: string;
   } | null>(null);
-
+  const captchaRef = React.useRef(null);
+  const onVerify = (token: string) => {
+    setVerifyToken(token);
+  };
+  const handleShowCaptchaWarning = (e: React.FormEvent) => {
+    e.preventDefault();
+    setManualClose(false);
+    setShowCaptchaWarning(true);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !email.includes("@")) {
-      setMessage({ type: "error", text: "Please enter a valid email address" });
+      setMessage({
+        type: "warning",
+        text: "Please enter a valid email address",
+      });
       return;
     }
 
@@ -39,6 +54,7 @@ export default function Hero() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-capcha-token": verifyToken,
           },
           body: JSON.stringify({ email }),
         },
@@ -47,9 +63,10 @@ export default function Hero() {
       if (response.ok) {
         setMessage({
           type: "success",
-          text: "Thanks! We'll be in touch soon.",
+          text: "Thanks! I'll be in touch soon.",
         });
         setEmail("");
+        setVerifyToken("");
       } else {
         setMessage({
           type: "error",
@@ -62,6 +79,8 @@ export default function Hero() {
         text: "Unable to send request. Please try again later.",
       });
     } finally {
+      setManualClose(false);
+      setShowCaptchaWarning(false);
       setLoading(false);
     }
   };
@@ -180,7 +199,9 @@ export default function Hero() {
           {/* CTA Form */}
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={
+              verifyToken != "" ? handleSubmit : handleShowCaptchaWarning
+            }
             sx={{
               width: "100%",
               maxWidth: 500,
@@ -229,6 +250,10 @@ export default function Hero() {
                   minWidth: "fit-content",
                   px: 3,
                   fontWeight: 600,
+                  "&.Mui-disabled": {
+                    color: "grey",
+                    cursor: "not-allowed",
+                  },
                 }}
               >
                 {loading ? (
@@ -242,12 +267,31 @@ export default function Hero() {
             {message && (
               <Alert
                 severity={message.type}
-                sx={{ mt: 2 }}
+                sx={{
+                  mt: 2,
+                }}
                 onClose={() => setMessage(null)}
               >
                 {message.text}
               </Alert>
             )}
+
+            {!verifyToken && showCaptchaWarning && !manualClose && (
+              <Alert
+                severity="warning"
+                sx={{ mt: 2 }}
+                onClose={() => setManualClose(true)}
+              >
+                Complete the Capture to Submit!
+              </Alert>
+            )}
+          </Box>
+          <Box display={!email ? "none" : "inherit"}>
+            <HCaptcha
+              sitekey="cfc2a48a-879c-4edc-a7c4-93580dd239a6"
+              onVerify={onVerify}
+              ref={captchaRef}
+            />
           </Box>
 
           <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>

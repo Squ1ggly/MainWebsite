@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
+    "@hcaptcha/react-hcaptcha": "^1.14.0",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/utils": "latest",
