@@ -1,9 +1,19 @@
 import { alpha, styled } from "@mui/material/styles";
-import { AppBar, Box, Button, Container, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  MenuItem,
+  Toolbar,
+  Menu,
+} from "@mui/material";
 import ColorModeIconDropdown from "../theme/ColorModeIconDropdown";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import ArticleIcon from "@mui/icons-material/Article";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import * as React from "react";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -39,8 +49,18 @@ const menuItems = [
 ];
 
 export default function AppAppBar() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleLinkClick = (url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
+    handleClose();
   };
 
   return (
@@ -98,10 +118,59 @@ export default function AppAppBar() {
                 size="small"
                 startIcon={item.icon}
                 onClick={() => handleLinkClick(item.url)}
+                sx={{
+                  display: { xs: "none", md: "inherit" },
+                }}
               >
                 {item.label}
               </NavButton>
             ))}
+          </Box>
+
+          {/*Mobile Menu*/}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              px: 2,
+            }}
+          >
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{
+                minWidth: 0,
+                display: { xs: "inherit", md: "none" },
+              }}
+            >
+              <MenuIcon />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              sx={{
+                display: { xs: "inherit", md: "none" },
+              }}
+            >
+              {menuItems.map((item) => (
+                <MenuItem
+                  key={item.label}
+                  // variant="text"
+                  color="primary"
+                  // size="small"
+                  // startIcon={}
+                  onClick={() => handleLinkClick(item.url)}
+                >
+                  <Box sx={{ paddingRight: "5px" }}>{item.icon} </Box>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
 
           <Box
