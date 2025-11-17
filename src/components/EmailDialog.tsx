@@ -107,7 +107,11 @@ export default function EmailDialog({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth
+    sx={{
+      backdropFilter: "blur(5px)"
+    }}
+    >
       <Box
         component="form"
         onSubmit={verifyToken != "" ? handleSubmit : handleShowCaptchaWarning}
@@ -116,6 +120,7 @@ export default function EmailDialog({
           flexDirection: "column",
           justifyContent: "centre",
           alignItems: "center",
+          backgroundColor: "background.default"
         }}
       >
         <DialogTitle sx={{ width: "100%" }}>
