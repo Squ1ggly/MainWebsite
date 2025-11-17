@@ -286,7 +286,7 @@ export default function Hero() {
               </Alert>
             )}
           </Box>
-          <Box display={!email ? "none" : "inherit"}>
+          <Box display={!(email || showCaptchaWarning) ? "none" : "inherit"}>
             <HCaptcha
               sitekey="cfc2a48a-879c-4edc-a7c4-93580dd239a6"
               onVerify={onVerify}
