@@ -67,6 +67,7 @@ export default function Hero() {
           text: "Thanks! I'll be in touch soon.",
         });
         setEmail("");
+        setDescription("");
         setVerifyToken("");
       } else {
         setMessage({

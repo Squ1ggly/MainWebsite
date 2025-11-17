@@ -88,6 +88,7 @@ export default function EmailDialog({
           text: "Thanks! I'll reach out within 24 hours to discuss your needs.",
         });
         setEmail("");
+        setDescription("");
         setVerifyToken("");
         setAfterSumbit(true);
       } else {
