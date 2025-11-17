@@ -126,7 +126,7 @@ export default function Hero() {
               textAlign: "center",
             }}
           >
-            Sams&nbsp;
+            Sam's&nbsp;
             <Typography
               component="span"
               variant="h1"
