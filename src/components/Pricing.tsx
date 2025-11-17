@@ -47,8 +47,8 @@ const tiers = [
     highlighted: true,
   },
   {
-    title: "Custom",
-    price: "Custom",
+    title: "Custom Support",
+    price: "",
     description: [
       "Hourly or project rates",
       "One-time projects",
@@ -180,7 +180,7 @@ export default function Pricing() {
                     variant="h6"
                     color="text.secondary"
                   >
-                    &nbsp;/month
+                    {tier.title == "Custom Support" ? "" : "/month"}
                   </Typography>
                 </Box>
 
