@@ -33,7 +33,7 @@ export default function Footer() {
         flexDirection: "column",
         alignItems: "center",
         gap: 8,
-        py: 10,
+        my: 8,
         textAlign: "center",
         position: "relative",
         "&::before": {

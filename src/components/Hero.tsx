@@ -16,6 +16,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Hero() {
   const [email, setEmail] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [verifyToken, setVerifyToken] = React.useState("");
   const [manualClose, setManualClose] = React.useState(false);
   const [showCaptchaWarning, setShowCaptchaWarning] = React.useState(false);
@@ -56,7 +57,7 @@ export default function Hero() {
             "Content-Type": "application/json",
             "x-capcha-token": verifyToken,
           },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, description }),
         },
       );
 
@@ -105,7 +106,7 @@ export default function Hero() {
           flexDirection: "column",
           alignItems: "center",
           pt: 20,
-          pb: 12,
+          pb: 8,
         }}
       >
         <Stack
@@ -204,15 +205,15 @@ export default function Hero() {
             }
             sx={{
               width: "100%",
-              maxWidth: 500,
+              maxWidth: 475,
               mt: 2,
             }}
           >
             <Stack
-              direction={{ xs: "column", sm: "row" }}
+              direction="column"
+              alignItems="center"
               spacing={1.5}
               useFlexGap
-              sx={{ width: "100%" }}
             >
               <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
                 Email
@@ -223,7 +224,7 @@ export default function Hero() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 hiddenLabel
-                size="medium"
+                size="small"
                 variant="outlined"
                 placeholder="your.email@company.com"
                 fullWidth
@@ -240,14 +241,26 @@ export default function Hero() {
                   },
                 }}
               />
+              <TextField
+                id="outlined-multiline"
+                multiline
+                fullWidth
+                placeholder="Description"
+                size="small"
+                rows={5}
+                maxRows={5}
+                variant="outlined"
+                onChange={(e) => setDescription(e.target.value)}
+              />
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
-                size="medium"
+                size="large"
                 disabled={loading}
                 sx={{
                   minWidth: "fit-content",
+                  width: "60%",
                   px: 3,
                   fontWeight: 600,
                   "&.Mui-disabled": {

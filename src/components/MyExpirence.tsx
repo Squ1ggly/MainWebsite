@@ -266,8 +266,8 @@ export default function MyExperience() {
   const selectedFeature = items[selectedItemIndex];
 
   return (
-    <Container id="experiences">
-      <Box sx={{ textAlign: "center", mb: 8 }}>
+    <Container id="experiences" sx={{ mb: 8 }}>
+      <Box sx={{ textAlign: "center", mb: 8, mt: 8 }}>
         <Typography
           component="h2"
           variant="h3"

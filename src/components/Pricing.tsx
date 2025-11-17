@@ -78,7 +78,7 @@ export default function Pricing() {
     <Container
       id="pricing"
       sx={{
-        pt: 12,
+        mt: 8,
         pb: 12,
         display: "flex",
         flexDirection: "column",
@@ -235,7 +235,7 @@ export default function Pricing() {
         open={dialogOpen}
         onClose={handleCloseDialog}
         planTitle={selectedTier}
-      ></EmailDialog>
+      />
     </Container>
   );
 }

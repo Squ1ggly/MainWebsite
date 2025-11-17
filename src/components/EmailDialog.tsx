@@ -23,6 +23,7 @@ export default function EmailDialog({
   planTitle,
 }: EmailDialogProps) {
   const [email, setEmail] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [verifyToken, setVerifyToken] = React.useState("");
   const [manualClose, setManualClose] = React.useState(false);
   const [showCaptchaWarning, setShowCaptchaWarning] = React.useState(false);
@@ -76,6 +77,7 @@ export default function EmailDialog({
           body: JSON.stringify({
             email,
             plan: planTitle,
+            description,
           }),
         },
       );
@@ -107,20 +109,23 @@ export default function EmailDialog({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth
-    sx={{
-      backdropFilter: "blur(5px)"
-    }}
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      sx={{
+        backdropFilter: "blur(5px)",
+      }}
     >
       <Box
         component="form"
         onSubmit={verifyToken != "" ? handleSubmit : handleShowCaptchaWarning}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "centre",
-          alignItems: "center",
-          backgroundColor: "background.default"
+          backgroundColor: "background.default",
         }}
       >
         <DialogTitle sx={{ width: "100%" }}>
@@ -157,6 +162,22 @@ export default function EmailDialog({
               },
             }}
           />
+
+          <TextField
+            id="outlined-multiline"
+            multiline
+            fullWidth
+            placeholder="Description"
+            size="medium"
+            rows={5}
+            maxRows={5}
+            variant="outlined"
+            onChange={(e) => setDescription(e.target.value)}
+            sx={{
+              marginTop: "10px",
+            }}
+          />
+
           {message && (
             <Alert
               severity={message.type}
