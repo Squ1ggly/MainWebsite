@@ -172,6 +172,7 @@ export default function EmailDialog({
             size="medium"
             rows={5}
             maxRows={5}
+            value={description}
             variant="outlined"
             onChange={(e) => setDescription(e.target.value)}
             sx={{

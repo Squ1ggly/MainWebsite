@@ -251,6 +251,7 @@ export default function Hero() {
                 rows={5}
                 maxRows={5}
                 variant="outlined"
+                value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
               <Button
