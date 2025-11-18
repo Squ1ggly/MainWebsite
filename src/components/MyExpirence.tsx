@@ -285,7 +285,7 @@ export default function MyExperience() {
           color="text.secondary"
           sx={{ maxWidth: 700, mx: "auto" }}
         >
-          A journey through roles where technology meets impact
+          A quick look at my experience and past achievements. 
         </Typography>
       </Box>
 

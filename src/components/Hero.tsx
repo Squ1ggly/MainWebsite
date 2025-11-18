@@ -55,7 +55,7 @@ export default function Hero() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-capcha-token": verifyToken,
+            "x-captcha-token": verifyToken,
           },
           body: JSON.stringify({ email, description }),
         },

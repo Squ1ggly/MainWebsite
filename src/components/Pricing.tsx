@@ -16,30 +16,31 @@ import EmailDialog from "./EmailDialog";
 
 const tiers = [
   {
-    title: "Standard",
-    price: "$85",
+    title: "Initial Setup",
+    subheader: "Small Business",
+    paymentFrequency: "/One time",
+    price: "$200",
     description: [
-      "Everything in Basic, plus:",
-      "Up to 20 hours per month",
-      "Security policy setup",
-      "Priority email support (24hr)",
-      "System administration tasks",
-      "Monthly check-in reports",
+      "Initial IT Infrastructure Setup",
+      "Budget-Friendly Solutions",
+      "Complete Computer Setup",
+      "Perfect for Small Teams"
     ],
     buttonText: "Get Started",
     buttonVariant: "outlined",
     buttonColor: "primary",
   },
   {
-    title: "Basic Support",
-    subheader: "Best Value",
-    price: "$45",
+    title: "Ongoing Support",
+    subheader: null,
+    paymentFrequency: "/hour",
+    price: "$70",
     description: [
-      "Up to 10 hours per month",
-      "Azure Entra ID user management",
-      "Basic account administration",
-      "Email support (48hr response)",
-      "Perfect for small teams",
+      "Home office setups",
+      "Basic online & in person IT support",
+      "Basic online & in person IT administration",
+      "Responses within 24 Hours",
+      "Perfect for individuals & Small businesses"
     ],
     buttonText: "Get Started",
     buttonVariant: "contained",
@@ -50,10 +51,9 @@ const tiers = [
     title: "Custom Support",
     price: "",
     description: [
-      "Hourly or project rates",
-      "One-time projects",
+      "Custom support plan",
+      "Large project deployment",
       "Flexible scheduling",
-      "Direct communication",
     ],
     buttonText: "Discuss Pricing",
     buttonVariant: "outlined",
@@ -101,8 +101,7 @@ export default function Pricing() {
           variant="body1"
           sx={{ color: "text.secondary", fontSize: "1.1rem" }}
         >
-          Flexible plans for small businesses. All plans include Azure
-          administration and IT support tailored to your needs.
+          Flexible plans for small businesses. And individuals who need local IT support.
         </Typography>
       </Box>
 
@@ -180,7 +179,7 @@ export default function Pricing() {
                     variant="h6"
                     color="text.secondary"
                   >
-                    {tier.title == "Custom Support" ? "" : "/month"}
+                    {tier?.paymentFrequency || ""}
                   </Typography>
                 </Box>
 

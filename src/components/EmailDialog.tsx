@@ -27,7 +27,7 @@ export default function EmailDialog({
   const [verifyToken, setVerifyToken] = React.useState("");
   const [manualClose, setManualClose] = React.useState(false);
   const [showCaptchaWarning, setShowCaptchaWarning] = React.useState(false);
-  const [afterSubmit, setAfterSumbit] = React.useState(false);
+  const [afterSubmit, setAfterSubmit] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const captchaRef = React.useRef(null);
   const onVerify = (token: string) => {
@@ -45,10 +45,10 @@ export default function EmailDialog({
 
   const handleClose = async () => {
     onClose();
-    await new Promise((r) => setTimeout(r, 200)); // Stops the ui from glithcing out when closing the form
+    await new Promise((r) => setTimeout(r, 200)); // Stops the ui from glitching out when closing the form
     setEmail("");
     setMessage(null);
-    setAfterSumbit(false);
+    setAfterSubmit(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,7 +72,7 @@ export default function EmailDialog({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-capcha-token": verifyToken,
+            "x-captcha-token": verifyToken,
           },
           body: JSON.stringify({
             email,
@@ -90,7 +90,7 @@ export default function EmailDialog({
         setEmail("");
         setDescription("");
         setVerifyToken("");
-        setAfterSumbit(true);
+        setAfterSubmit(true);
       } else {
         setMessage({
           type: "error",
