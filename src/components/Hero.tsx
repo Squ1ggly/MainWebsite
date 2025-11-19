@@ -249,7 +249,6 @@ export default function Hero() {
                 placeholder="Description"
                 size="small"
                 rows={5}
-                maxRows={5}
                 variant="outlined"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}

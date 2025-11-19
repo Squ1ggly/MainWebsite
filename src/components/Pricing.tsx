@@ -112,8 +112,8 @@ export default function Pricing() {
           gap: 3,
         }}
       >
-        {tiers.map((tier, _index) => (
-          <Box>
+        {tiers.map((tier, index) => (
+          <Box key={index} >
             <Card
               sx={{
                 display: "flex",

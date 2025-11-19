@@ -63,6 +63,26 @@ export default function AppAppBar() {
     handleClose();
   };
 
+  React.useEffect(() => {
+    console.log("Running the useEffect")
+    const mediaQuery = window.matchMedia('(min-width: 900px)');
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      if (e.matches && open) {
+        handleClose();
+      }
+    };
+
+    // Check on mount only
+    if (mediaQuery.matches && open) {
+      handleClose();
+    }
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaChange);
+  }, [open, handleClose]);
+
+
   return (
     <AppBar
       position="fixed"
